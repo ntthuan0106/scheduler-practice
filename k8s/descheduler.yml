@@ -1,0 +1,54 @@
+apiVersion: "descheduler/v1alpha1"
+kind: "DeschedulerPolicy"
+strategies:
+  RemovePodsViolatingInterPodAntiAffinity:
+    enabled: true
+    params:
+      namespaces:
+      - "default"
+      labelSelector:
+        matchLabels:
+          app: myapp
+      minPodsToEvictPerNode: 1
+      maxPodsToEvictPerNode: 2
+
+  RemovePodsViolatingNodeAffinity:
+    enabled: true
+    params:
+      namespaces:
+      - "default"
+      labelSelector:
+        matchLabels:
+          app: myapp
+      minPodsToEvictPerNode: 1
+      maxPodsToEvictPerNode: 3
+
+  RemovePodsViolatingTopologySpreadConstraint:
+    enabled: true
+    params:
+      namespaces:
+      - "default"
+      labelSelector:
+        matchLabels:
+          app: myapp
+
+  RemovePodsHavingTooManyRestarts:
+    enabled: true
+    params:
+      namespaces:
+      - "default"
+      podRestartThreshold: 5 # Nếu pod restart > 5 lần trong thời gian gần đây sẽ bị evict
+      podRestartWindowSeconds: 3600 # Tính restart trong vòng 1 giờ
+
+  PodLifeTime:
+    enabled: true
+    params:
+      maxPodLifeTimeSeconds: 86400 # Evict pod chạy lâu hơn 24h
+      namespaces:
+      - "default"
+
+  RemoveFailedPods:
+    enabled: true
+    params:
+      namespaces:
+      - "default"
